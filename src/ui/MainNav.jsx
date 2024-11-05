@@ -82,7 +82,7 @@ const MainNav = () => {
           </StyledNavLink>
         </li>
         <li>
-          <StyledNavLink to='/setttings'>
+          <StyledNavLink to='/settings'>
             <HiOutlineCog6Tooth />
             <span>Settings</span>
           </StyledNavLink>
