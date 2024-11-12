@@ -2,13 +2,13 @@ import PropTypes from 'prop-types';
 import { createContext, useContext, useState } from 'react';
 import { HiEllipsisVertical } from 'react-icons/hi2';
 import styled from 'styled-components';
+import { createPortal } from 'react-dom';
 import { useOutsideClick } from '../hooks/useOutSideClick';
 
 const Menu = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  position: relative;
 `;
 
 const StyledToggle = styled.button`
@@ -31,9 +31,7 @@ const StyledToggle = styled.button`
 `;
 
 const StyledList = styled.ul`
-  position: absolute;
-  z-index: 1;
-
+  position: fixed;
   background-color: var(--color-grey-0);
   box-shadow: var(--shadow-md);
   border-radius: var(--border-radius-md);
@@ -88,8 +86,8 @@ const Toggle = ({ id }) => {
   const handleClick = (e) => {
     const rect = e.target.closest('button').getBoundingClientRect();
     setPosition({
-      x: -8,
-      y: rect.height + 8,
+      x: window.innerWidth - rect.width - rect.x,
+      y: rect.y + rect.height + 8,
     });
     openId === '' || openId !== id ? open(id) : close();
   };
@@ -107,10 +105,11 @@ const List = ({ id, children }) => {
 
   if (openId !== id) return null;
 
-  return (
+  return createPortal(
     <StyledList ref={ref} position={position}>
       {children}
-    </StyledList>
+    </StyledList>,
+    document.body
   );
 };
 const Button = ({ children, icon, onClick }) => {
